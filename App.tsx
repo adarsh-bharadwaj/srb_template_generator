@@ -198,7 +198,7 @@ const App = () => {
 
         <View style={styles.titleTextContainer}>
           <Text style={[{ fontSize: fs(2.2) }, styles.titleText]}>{'Rental Set Template Generator'}</Text>
-          <Text style={[styles.titleText, { fontSize: fs(1.9) }]}>{'v 0.1'}</Text>
+          <Text style={[styles.titleText, { fontSize: fs(1.9) }]}>{'v 0.2'}</Text>
         </View>
 
         <View style={styles.formContainer}>
