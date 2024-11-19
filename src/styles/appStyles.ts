@@ -62,7 +62,8 @@ export const appStyles = () => {
         },
         descriptionInput: {
             height: hp(15),
-            textAlignVertical: 'top'
+            textAlignVertical: 'top',
+            paddingLeft:wp(1.5)
         },
         calendarInputContainer: {
             display: 'flex',
@@ -85,13 +86,14 @@ export const appStyles = () => {
             borderColor: COLORS.themePrimaryColor,
             borderWidth: 1,
             justifyContent: 'center',
-            paddingLeft: wp(1),
+            paddingLeft: wp(1.5),
             height: hp(5.5),
             width: wp(85),
             borderRadius: 10
         },
         calendarInputText: {
-            textAlignVertical: 'center'
+            textAlignVertical: 'center',
+            color:'grey',
         },
         bottomButtonsContainer: {
             display: 'flex',
@@ -136,6 +138,9 @@ export const appStyles = () => {
             position: 'absolute',
             width: wp(100),
             height: wp(150)
+        },
+        input:{
+            paddingLeft:wp(1.5)
         }
     })
 }

@@ -29,6 +29,7 @@ const App = () => {
   const [description, setDescription] = useState('')
   const [base64, setBase64] = useState('');
   const styles = appStyles();
+  const minDate = new Date();
 
   useEffect(() => {
     // Add event listener for back button
@@ -42,15 +43,14 @@ const App = () => {
     );
 
     return () => backHandler.remove(); // Clean up listener on component unmount
-  }, [enableCalendar,enablePreview]);
+  }, [enableCalendar, enablePreview]);
 
-  const closeModals = ()=>{
+  const closeModals = () => {
     if (enableCalendar) {
       setEnableCalendar(false); // Close the modal if it's open
       return true; // Prevent default back action
     }
-    if(enablePreview)
-    {
+    if (enablePreview) {
       setEnablePreview(false)
       return true;
     }
@@ -128,6 +128,10 @@ const App = () => {
     }
     if (base64 === '') {
       Alert.alert('Warning', 'Please Capture Image');
+      return
+    }
+    if (phone.length < 10) {
+      Alert.alert('Warning', 'Please Enter Valid Phone No.');
       return
     }
 
@@ -208,8 +212,8 @@ const App = () => {
             </TouchableOpacity>
           </View>
 
-          <CustomTextInput value={name} onChangeText={(value) => setName(value)} label='Name' placeholder='Enter Name' />
-          <CustomTextInput value={phone} maxLength={10} onChangeText={(value) => setPhone(value)} label='Phone No.' placeholder='Enter Phone No.' keyboardType='number-pad' />
+          <CustomTextInput style={styles.input} value={name} onChangeText={(value) => setName(value)} label='Name' placeholder='Enter Name' />
+          <CustomTextInput style={styles.input} value={phone} maxLength={10} onChangeText={(value) => setPhone(value)} label='Phone No.' placeholder='Enter Phone No.' keyboardType='number-pad' />
           <CustomTextInput value={description} onChangeText={(value) => setDescription(value)} textInputContainerStyle={styles.descriptionInputContainer}
             style={styles.descriptionInput} multiline={true} numberOfLines={6} label='Set Description' placeholder='Enter Set Description' />
 
@@ -231,11 +235,11 @@ const App = () => {
         </View>
 
         <View style={styles.bottomButtonsContainer}>
-          <TouchableOpacity onPress={generate} style={styles.bottomButton}>
-            <Text style={styles.bottomButtonText}>Generate</Text>
-          </TouchableOpacity>
           <TouchableOpacity onPress={reset} style={styles.bottomButton}>
             <Text style={styles.bottomButtonText}>Reset</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={generate} style={styles.bottomButton}>
+            <Text style={styles.bottomButtonText}>Generate</Text>
           </TouchableOpacity>
         </View>
 
@@ -245,7 +249,7 @@ const App = () => {
         <View style={styles.modalContainer}>
           <TouchableOpacity onPress={() => setEnableCalendar(false)} style={styles.modalBackDrop} />
           <View style={styles.calendarPickerContainer}>
-            <CalendarPicker selectedStartDate={selectedDate} width={wp(90)} onDateChange={(value: Date) => { setSelectedDate(value); setDateText(moment(value).format('DD-MM-YYYY')); setEnableCalendar(false) }} />
+            <CalendarPicker minDate={minDate} selectedStartDate={selectedDate} width={wp(90)} onDateChange={(value: Date) => { setSelectedDate(value); setDateText(moment(value).format('DD-MM-YYYY')); setEnableCalendar(false) }} />
           </View>
         </View>
       )}
