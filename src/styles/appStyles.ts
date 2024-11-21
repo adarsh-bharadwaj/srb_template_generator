@@ -63,7 +63,7 @@ export const appStyles = () => {
         descriptionInput: {
             height: hp(15),
             textAlignVertical: 'top',
-            paddingLeft:wp(1.5)
+            paddingLeft: wp(1.5)
         },
         calendarInputContainer: {
             display: 'flex',
@@ -93,7 +93,7 @@ export const appStyles = () => {
         },
         calendarInputText: {
             textAlignVertical: 'center',
-            color:'grey',
+            color: 'grey',
         },
         bottomButtonsContainer: {
             display: 'flex',
@@ -139,8 +139,29 @@ export const appStyles = () => {
             width: wp(100),
             height: wp(150)
         },
-        input:{
-            paddingLeft:wp(1.5)
+        input: {
+            paddingLeft: wp(1.5)
+        },
+        categoriesContainer: {
+            width: wp(80),
+            marginTop: hp(3),
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between'
+        },
+        categoryName: {
+            fontSize: fs(2),
+            width: wp(50),
+            textAlignVertical: 'center'
+        },
+        categoryInputContainer: {
+            width: wp(20)
+        },
+        categoryInput: {
+            borderRadius: 10,
+            textAlign: 'center',
+            borderWidth: 1,
+            borderColor: COLORS.themePrimaryColor
         }
     })
 }

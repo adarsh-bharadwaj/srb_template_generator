@@ -6,7 +6,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Alert, BackHandler, Image, KeyboardAvoidingView, Linking, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, BackHandler, Image, KeyboardAvoidingView, Linking, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { StatusBar } from './src/components/StatusBar';
 import { useResponsiveDimensions } from './src/hooks/useResponsiveDimensions';
 import CustomTextInput from './src/components/CustomTextInput';
@@ -16,6 +16,7 @@ import moment from 'moment';
 import { launchCamera } from 'react-native-image-picker';
 import Share from 'react-native-share';
 import { appStyles } from './src/styles/appStyles';
+import _ from 'lodash';
 
 const App = () => {
   const { wp, hp, fs } = useResponsiveDimensions();
@@ -30,6 +31,18 @@ const App = () => {
   const [base64, setBase64] = useState('');
   const styles = appStyles();
   const minDate = new Date();
+  const [categories, setCategories] = useState([
+    { id: 1, name: 'Jade', qty: '' },
+    { id: 2, name: 'Baithale', qty: '' },
+    { id: 3, name: 'Bille', qty: '' },
+    { id: 4, name: 'Kutchu', qty: '' },
+    { id: 5, name: 'Choker', qty: '' },
+    { id: 6, name: 'Long Chain', qty: '' },
+    { id: 7, name: 'Short Chain', qty: '' },
+    { id: 8, name: 'Earings', qty: '' },
+    { id: 9, name: 'Vanki', qty: '' },
+    { id: 10, name: 'Dabu', qty: '' }
+  ]);
 
   useEffect(() => {
     // Add event listener for back button
@@ -135,8 +148,12 @@ const App = () => {
       return
     }
 
-    const message = `*Name:* ${name}\n*Phone No.:* ${phone}\n*Description:* ${description}\n*Date:* ${dateText}`;
-
+    let message = `*Name:* ${name}\n*Phone No.:* ${phone}\n*Description:* ${description}`;
+    categories.map((item) => {
+      if (item.qty !== '' && parseFloat(item.qty) > 0)
+        message = message + `\n\t*-* *${item.name}:* ${item.qty}`
+    })
+    message = message + `\n*Date:* ${dateText}`
     const shareOptions = {
       title: 'Share via WhatsApp',
       message,
@@ -187,6 +204,24 @@ const App = () => {
     setBase64('');
   }
 
+  const categoriesUpdate = (object) => {
+    const regex = /^\d+$/;
+    if (regex.test(object.qty)) {
+      setCategories((prev) => {
+        prev = prev.filter((obj) => obj.id !== object.id)
+        return _.sortBy([...prev, { ...object }], ['id'])
+      })
+      return
+    }
+    else
+    {
+      Alert.alert('Warning', 'Please Enter Customer Name');
+      return
+    }
+  }
+
+  console.log({ categories });
+
   return (
 
     <KeyboardAvoidingView behavior='height' enabled={true} contentContainerStyle={styles.keyboardAvoidViewContentContainer}>
@@ -198,7 +233,7 @@ const App = () => {
 
         <View style={styles.titleTextContainer}>
           <Text style={[{ fontSize: fs(2.2) }, styles.titleText]}>{'Rental Set Template Generator'}</Text>
-          <Text style={[styles.titleText, { fontSize: fs(1.9) }]}>{'v 0.2'}</Text>
+          <Text style={[styles.titleText, { fontSize: fs(1.9) }]}>{'v 0.3'}</Text>
         </View>
 
         <View style={styles.formContainer}>
@@ -212,11 +247,21 @@ const App = () => {
             </TouchableOpacity>
           </View>
 
-          <CustomTextInput style={styles.input} value={name} onChangeText={(value) => setName(value)} label='Name' placeholder='Enter Name' />
-          <CustomTextInput style={styles.input} value={phone} maxLength={10} onChangeText={(value) => setPhone(value)} label='Phone No.' placeholder='Enter Phone No.' keyboardType='number-pad' />
-          <CustomTextInput value={description} onChangeText={(value) => setDescription(value)} textInputContainerStyle={styles.descriptionInputContainer}
+          <CustomTextInput style={styles.input} value={name} onChangeText={(value) => setName(value.trim())} label='Name' placeholder='Enter Name' />
+          <CustomTextInput style={styles.input} value={phone} maxLength={10} onChangeText={(value) => setPhone(value.trim())} label='Phone No.' placeholder='Enter Phone No.' keyboardType='number-pad' />
+          <CustomTextInput value={description} onChangeText={(value) => setDescription(value.trim())} textInputContainerStyle={styles.descriptionInputContainer}
             style={styles.descriptionInput} multiline={true} numberOfLines={6} label='Set Description' placeholder='Enter Set Description' />
 
+          {categories.map((item) => {
+            return (
+              <View key={item.id} style={styles.categoriesContainer}>
+                <Text style={styles.categoryName}>{item.name}</Text>
+                <View style={styles.categoryInputContainer}>
+                  <TextInput onChangeText={(value) => categoriesUpdate({ ...item, qty: value.trim() })} placeholder='Qty' keyboardType='number-pad' style={styles.categoryInput} />
+                </View>
+              </View>
+            )
+          })}
           <View style={styles.calendarInputContainer}>
 
             <View style={styles.calendarLabelContainer}>
